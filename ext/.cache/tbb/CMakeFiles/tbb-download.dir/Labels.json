@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/Users/rcapouel/work/research/2022_quadratic_contours/quadratic_contours/ext/.cache/tbb/CMakeFiles/tbb-download"
+		},
+		{
+			"file" : "/Users/rcapouel/work/research/2022_quadratic_contours/quadratic_contours/ext/.cache/tbb/CMakeFiles/tbb-download.rule"
+		},
+		{
+			"file" : "/Users/rcapouel/work/research/2022_quadratic_contours/quadratic_contours/ext/.cache/tbb/CMakeFiles/tbb-download-complete.rule"
+		},
+		{
+			"file" : "/Users/rcapouel/work/research/2022_quadratic_contours/quadratic_contours/ext/.cache/tbb/tbb-download-prefix/src/tbb-download-stamp/tbb-download-build.rule"
+		},
+		{
+			"file" : "/Users/rcapouel/work/research/2022_quadratic_contours/quadratic_contours/ext/.cache/tbb/tbb-download-prefix/src/tbb-download-stamp/tbb-download-configure.rule"
+		},
+		{
+			"file" : "/Users/rcapouel/work/research/2022_quadratic_contours/quadratic_contours/ext/.cache/tbb/tbb-download-prefix/src/tbb-download-stamp/tbb-download-download.rule"
+		},
+		{
+			"file" : "/Users/rcapouel/work/research/2022_quadratic_contours/quadratic_contours/ext/.cache/tbb/tbb-download-prefix/src/tbb-download-stamp/tbb-download-install.rule"
+		},
+		{
+			"file" : "/Users/rcapouel/work/research/2022_quadratic_contours/quadratic_contours/ext/.cache/tbb/tbb-download-prefix/src/tbb-download-stamp/tbb-download-mkdir.rule"
+		},
+		{
+			"file" : "/Users/rcapouel/work/research/2022_quadratic_contours/quadratic_contours/ext/.cache/tbb/tbb-download-prefix/src/tbb-download-stamp/tbb-download-patch.rule"
+		},
+		{
+			"file" : "/Users/rcapouel/work/research/2022_quadratic_contours/quadratic_contours/ext/.cache/tbb/tbb-download-prefix/src/tbb-download-stamp/tbb-download-test.rule"
+		},
+		{
+			"file" : "/Users/rcapouel/work/research/2022_quadratic_contours/quadratic_contours/ext/.cache/tbb/tbb-download-prefix/src/tbb-download-stamp/tbb-download-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"tbb-download"
+		],
+		"name" : "tbb-download"
+	}
+}

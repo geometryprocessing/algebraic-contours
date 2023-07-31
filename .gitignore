@@ -1,0 +1,9 @@
+/build*
+/output*
+figures/output*
+data*
+logs*
+*.DS_Store
+*.so
+.DS_Store
+
