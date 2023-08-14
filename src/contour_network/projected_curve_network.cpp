@@ -1585,6 +1585,42 @@ ProjectedCurveNetwork::discretize_curve(
   }
 }
 
+// Check if next/prev are consistent
+bool
+is_valid_next_prev_pair(
+  const std::vector<int>& next,
+  const std::vector<int>& prev
+) {
+  int next_size = next.size();
+  int prev_size = prev.size();
+
+  // Check for consistent sizes
+  if (next_size != prev_size)
+  {
+    spdlog::error("Inconsistent prev/next sizes");
+    return false;
+  }
+
+  for (int i = 0; i < next_size; ++i)
+  {
+    // Check prev[next] is the identity where it is defined
+    if ((next[i] != -1) && (prev[next[i]] != i))
+    {
+      spdlog::error("prev[next] is not the identity");
+      return false;
+    }
+
+    // Check next[prev] is the identity where it is defined
+    if ((prev[i] != -1) && (next[prev[i]] != i))
+    {
+      spdlog::error("next[prev] is not the identity");
+      return false;
+    }
+  }
+
+  return true;
+}
+
 void
 ProjectedCurveNetwork::simplify_curves(
   const std::vector<NodeIndex>& visible_curve_start_nodes,
@@ -1611,7 +1647,7 @@ ProjectedCurveNetwork::simplify_curves(
       PlanarPoint pi = node_planar_point(end_node_i);
       PlanarPoint pj = node_planar_point(start_node_j);
       PlanarPoint difference = pj - pi;
-      if (difference.dot(difference) > 1e-4)
+      if (difference.dot(difference) > 1e-7)
         continue;
 
       // Get next visible node after the end node i
@@ -1645,6 +1681,17 @@ ProjectedCurveNetwork::simplify_curves(
     }
   }
 
+#if CHECK_VALIDITY
+  // Check if the connectivity has consistent next/prev pairs
+  if (!is_valid_next_prev_pair(next, prev))
+  {
+    spdlog::error("Invalid next/prev pair found");
+    simplified_points.clear();
+    simplified_polylines.clear();
+    return;
+  }
+#endif
+
   // Combine the sorted lines
   std::vector<bool> covered(num_curves, false);
   for (int i = 0; i < num_curves; ++i) {
@@ -1664,8 +1711,8 @@ ProjectedCurveNetwork::simplify_curves(
     }
 
     // Iterate until end of chain found
-    std::vector<PlanarPoint> points;
-    std::vector<int> polyline;
+    std::vector<PlanarPoint> points(0);
+    std::vector<int> polyline(0);
     int current_index = start_index;
     int prev_index;
     do {
@@ -1677,10 +1724,21 @@ ProjectedCurveNetwork::simplify_curves(
       prev_index = current_index;
       current_index = next[current_index];
       SPDLOG_INFO("Processing index {}", current_index);
-    } while ((current_index != -1) && (current_index != start_index));
+
+      // Break if current index is invalid or check for consistency
+      if (current_index == -1) break;
+      PlanarPoint end_point = all_points[prev_index].back();
+      PlanarPoint start_point = all_points[current_index].front();
+      PlanarPoint difference = start_point - end_point;
+      if (difference.dot(difference) > 2e-4)
+      {
+        spdlog::error("Points {} and {} are distant", end_point, start_point);
+      }
+
+    } while (current_index != start_index);
 
     // Close loop or add last point
-    if (current_index == i) {
+    if (current_index == start_index) {
       polyline.push_back(0);
     } else {
       polyline.push_back(points.size());
@@ -1990,20 +2048,17 @@ ProjectedCurveNetwork::write(const std::string& output_path,
       if (is_boundary_cusp_node(i)) {
         spdlog::info("Writing boundary cusp node at {}", node_point);
         write_planar_point(
-          node_point, svgWriter, 800, 400, Color(0, 0, 0.545, 1) // Red
+          node_point, svgWriter, 800, 400, Color(0, 0, 0.545, 1) // Blue
         );
       } else if (is_interior_cusp_node(i)) {
         spdlog::info("Writing interior cusp node at {}", node_point);
         write_planar_point(
-          node_point, svgWriter, 800, 400, Color(0.537, 0.671, 0.890, 1) // Pink
+          node_point, svgWriter, 800, 400, Color(0.537, 0.671, 0.890, 1) // Light blue
         );
       } else if (is_intersection_node(i)) {
         spdlog::info("Writing intersection node at {}", node_point);
-        write_planar_point(node_point,
-                           svgWriter,
-                           800,
-                           400,
-                           Color(0.227, 0.420, 0.208, 1) // Green
+        write_planar_point(
+          node_point, svgWriter, 800, 400, Color(0.227, 0.420, 0.208, 1) // Green
         );
       }
     }

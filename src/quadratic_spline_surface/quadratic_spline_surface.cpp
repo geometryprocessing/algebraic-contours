@@ -223,7 +223,7 @@ QuadraticSplineSurface::screenshot(const std::string& filename,
                                    bool use_orthographic) const
 {
   add_surface_to_viewer();
-  polyscope::options::groundPlaneMode = polyscope::GroundPlaneMode::ShadowOnly;
+  //polyscope::options::groundPlaneMode = polyscope::GroundPlaneMode::ShadowOnly;
   glm::vec3 glm_camera_position = { camera_position[0],
                                     camera_position[1],
                                     camera_position[2] };
@@ -239,6 +239,7 @@ QuadraticSplineSurface::screenshot(const std::string& filename,
   }
   polyscope::screenshot(filename);
   spdlog::info("Screenshot saved to {}", filename);
+  polyscope::removeAllStructures();
 }
 
 void

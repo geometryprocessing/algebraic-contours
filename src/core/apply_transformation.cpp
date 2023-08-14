@@ -267,7 +267,7 @@ apply_camera_frame_transformation_to_vertices(const MatrixXr& input_V,
     rotate_frame_projective_matrix(frame);
 
   // Generate translation matrix
-  double z_distance = 4.0;
+  double z_distance = 5.0;
   SpatialVector translation(3);
   translation << 0.0, 0.0, z_distance;
   Eigen::Matrix<double, 4, 4> translation_matrix =

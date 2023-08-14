@@ -202,6 +202,7 @@ int main(int argc, char *argv[]) {
   CLI::App app{"Generate approximation error animation for a given mesh."};
   std::string input_filename = "";
   std::string output_dir = "./";
+  std::string output_path;
   app.add_option("-i,--input", input_filename, "Mesh filepath")
     ->check(CLI::ExistingFile)
     ->required();
@@ -306,7 +307,6 @@ int main(int argc, char *argv[]) {
     compute_vertex_distance(V_unprojected_perspective, V_projected_perspective, distances);
 
     // Write unprojected surface output
-    std::string output_path;
     output_path = join_path(output_dir, "unprojected_frame_" + std::to_string(i) + ".png");
     screenshot_surface(output_path, V_unprojected_perspective, F_unprojected, distances);
     output_path = join_path(output_dir, "unprojected_planar_frame_" + std::to_string(i) + ".png");

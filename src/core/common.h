@@ -240,7 +240,7 @@ screenshot_mesh(
   polyscope::registerSurfaceMesh("surface", V, F)
     ->setEdgeWidth(1)
     ->setSurfaceColor(glm::vec3(0.670, 0.673, 0.292));
-  polyscope::options::groundPlaneMode = polyscope::GroundPlaneMode::ShadowOnly;
+  //polyscope::options::groundPlaneMode = polyscope::GroundPlaneMode::ShadowOnly;
   glm::vec3 glm_camera_position = { camera_position[0],
                                     camera_position[1],
                                     camera_position[2] };
@@ -255,6 +255,7 @@ screenshot_mesh(
     polyscope::view::projectionMode = polyscope::ProjectionMode::Perspective;
   }
   polyscope::screenshot(filename);
+  polyscope::removeAllStructures();
 }
 
 // ****************

@@ -36,6 +36,10 @@ int main(int argc, char *argv[]) {
   Eigen::MatrixXi F, FT, FN;
   igl::readOBJ(input_filename, V, uv, N, F, FT, FN);
 
+  // Set up polyscope
+  polyscope::init();
+  polyscope::options::groundPlaneMode = polyscope::GroundPlaneMode::ShadowOnly;
+
   // Set up the camera
   if (camera_filename == "")
   {
@@ -86,8 +90,6 @@ int main(int argc, char *argv[]) {
       fit_matrix, energy_hessian, energy_hessian_inverse);
 
   // View the quadratic surface
-  polyscope::init();
-  polyscope::options::groundPlaneMode = polyscope::GroundPlaneMode::ShadowOnly;
   spline_surface.screenshot(
     join_path(output_dir, "spline_surface.png"),
     SpatialVector(0, 0, 0),

@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
   std::string output_dir = "./";
   std::string camera_filename = "";
   spdlog::level::level_enum log_level = spdlog::level::off;
-  SVGOutputMode svg_output_mode = SVGOutputMode::uniform_simplified_visible_curves;
+  SVGOutputMode svg_output_mode = SVGOutputMode::uniform_visible_curves;
   OptimizationParameters optimization_params;
   IntersectionParameters intersect_params;
   InvisibilityParameters invisibility_params;

@@ -42,6 +42,7 @@ int main(int argc, char *argv[]) {
 
   // Set up polyscope
   polyscope::init();
+  polyscope::options::groundPlaneMode = polyscope::GroundPlaneMode::None;
 
   // Set up the camera
   if (camera_filename == "")

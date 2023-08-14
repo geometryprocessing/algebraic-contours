@@ -36,13 +36,21 @@ is_adjacent_contour_segment(
   return float_equal_zero(squared_distance);
 }
 
+// Distance helper function
+double
+point_distance_squared(const SpatialVector& point_1,
+                       const SpatialVector& point_2)
+{
+  SpatialVector displacement = point_1 - point_2;
+  return displacement.dot(displacement);
+}
+
 // Return true iff the two points overlap
 bool
 are_overlapping_points(const SpatialVector& point_1,
                        const SpatialVector& point_2)
 {
-  SpatialVector displacement = point_1 - point_2;
-  double squared_distance = displacement.dot(displacement);
+  double squared_distance = point_distance_squared(point_1, point_2);
   return float_equal_zero(squared_distance);
 }
 
@@ -106,22 +114,38 @@ add_next_contour_segment(
   const std::vector<SpatialVector>& contour_start_points,
   const std::vector<SpatialVector>& contour_end_points)
 {
+  double min_distance_sq = 1e10; // FIXME
+  int next_candidate = -1;
+
+  // Find the closest next segment
   for (size_t i = 0; i < contour_segments.size(); ++i) {
     // Skip used segments
     if (used_segments[i])
       continue;
 
-    // Determine if the candidate contour segment is adjacent to the growing
-    // chain
-    if (are_overlapping_points(contour_end_points[current_contour.back()],
-                               contour_start_points[i])) {
-      current_contour.push_back(i);
-      used_segments[i] = true;
-      return true;
+    // Check if the current oriented contour is closer than the candidate
+    double cur_distance_sq = point_distance_squared(contour_end_points[current_contour.back()],
+                              contour_start_points[i]);
+    if (cur_distance_sq < min_distance_sq)
+    {
+      min_distance_sq = cur_distance_sq;
+      next_candidate = i;
     }
   }
 
-  // Return false if no segment found
+  // Check if any candidate found
+  if (next_candidate == -1) return false;
+
+  // Determine if the candidate contour segment is adjacent to the growing
+  // chain
+  if (are_overlapping_points(contour_end_points[current_contour.back()],
+                              contour_start_points[next_candidate])) {
+    current_contour.push_back(next_candidate);
+    used_segments[next_candidate] = true;
+    return true;
+  }
+
+  // Return false if no valid segment found
   return false;
 }
 
@@ -135,23 +159,42 @@ add_next_reverse_contour_segment(
   const std::vector<SpatialVector>& contour_start_points,
   const std::vector<SpatialVector>& contour_end_points)
 {
+  double min_distance_sq = 1e10; // FIXME
+  int prev_candidate = -1;
+
+  // Find the closest prev segment
   for (size_t i = 0; i < contour_segments.size(); ++i) {
     // Skip used segments
     if (used_segments[i])
       continue;
 
-    // Determine if the candidate contour segment is adjacent to the growing
-    // chain
-    if (are_overlapping_points(
-          contour_end_points[i],
-          contour_start_points[current_contour_reverse.back()])) {
-      current_contour_reverse.push_back(i);
-      used_segments[i] = true;
-      return true;
+    // Check if the current oriented contour is closer than the candidate
+    double cur_distance_sq = point_distance_squared(contour_start_points[current_contour_reverse.back()],
+                              contour_end_points[i]);
+    if (cur_distance_sq < min_distance_sq)
+    {
+      min_distance_sq = cur_distance_sq;
+      prev_candidate = i;
     }
   }
 
+  // Check if any candidate found
+  if (prev_candidate == -1) return false;
+
+  // Determine if the candidate contour segment is adjacent to the growing
+  // chain
+  if (are_overlapping_points(contour_start_points[current_contour_reverse.back()],
+                              contour_end_points[prev_candidate])) {
+    current_contour_reverse.push_back(prev_candidate);
+    used_segments[prev_candidate] = true;
+    return true;
+  }
+
   // Return false if no segment found
+  //if (are_overlapping_points(
+  //      contour_end_points[i],
+  //      contour_start_points[current_contour_reverse.back()])) {
+  //  current_contour_reverse.push_back(i);
   return false;
 }
 

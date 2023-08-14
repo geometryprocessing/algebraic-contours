@@ -21,6 +21,7 @@ list(PREPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 # Set compile definitions
 add_compile_definitions(EIGEN_STACK_ALLOCATION_LIMIT=0)
+add_compile_definitions(CHECK_VALIDITY)
 
 # Fetch libigl
 include(libigl)
