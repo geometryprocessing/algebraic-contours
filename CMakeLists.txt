@@ -24,9 +24,17 @@ add_compile_definitions(EIGEN_STACK_ALLOCATION_LIMIT=0)
 add_compile_definitions(CHECK_VALIDITY)
 
 # Fetch libigl
-include(libigl)
+option(LIBIGL_PREDICATES               "Use Predicates"     ON)
+option(RENDER_TEXTURE                  "Render results"     ON)
+option(LIBIGL_OPENGL            "Use OpenGL"         ON)
+option(LIBIGL_GLFW              "Use GLFW"           ON)
+option(LIBIGL_PNG               "Use PNG"            ON)
+option(LIBIGL_EMBREE              "Use EMBREE"         ON)
 
 # Fetch other dependencies
+include(conformal_ideal_delaunay)
+include(hidden_cones)
+include(libigl)
 include(polyscope)
 include(eigen)
 include(spdlog)

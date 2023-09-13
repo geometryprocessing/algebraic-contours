@@ -26,6 +26,8 @@
 #include <sstream>
 #include <vector>
 
+#include <igl/combine.h>
+#include <igl/facet_components.h>
 #include <igl/is_edge_manifold.h>
 #include <igl/is_vertex_manifold.h>
 #include <igl/remove_unreferenced.h>
@@ -949,14 +951,6 @@ is_manifold(const Eigen::MatrixXi& F)
     return false;
   }
 
-  // Check single component
-  Eigen::MatrixXi component_ids;
-  igl::vertex_components(F, component_ids);
-  if ((component_ids.maxCoeff() - component_ids.minCoeff()) > 0) {
-    spdlog::error("Mesh has multiple components");
-    return false;
-  }
-
   // Manifold otherwise
   return true;
 }
@@ -1161,6 +1155,89 @@ remove_mesh_vertices(const Eigen::MatrixXd& V,
   // Remove faces adjacent to cones
   remove_mesh_faces(V, F, faces_to_remove, V_submesh, F_submesh);
 }
+
+/// Given a mesh, separate it into lists of separate connected components.
+///
+/// @param[in] V: initial mesh vertices
+/// @param[in] F: initial mesh faces
+/// @param[out] V_components: list of component mesh vertices
+/// @param[out] F_components: list of component mesh faces
+/// @param[out] I_components: list of component maps from old to new vertices
+/// @param[out] J_components: list of component maps from new to old vertices
+inline void
+separate_mesh_components(const Eigen::MatrixXd& V,
+                        const Eigen::MatrixXi& F,
+                        std::vector<Eigen::MatrixXd>& V_components,
+                        std::vector<Eigen::MatrixXi>& F_components,
+                        std::vector<Eigen::VectorXi>& I_components,
+                        std::vector<Eigen::VectorXi>& J_components)
+{
+  // Get labels for mesh components
+  Eigen::VectorXi component_ids;
+  igl::facet_components(F, component_ids);
+  int num_components = component_ids.maxCoeff() + 1;
+  std::vector<int> counts(num_components, 0);
+  int num_faces = F.rows();
+  for (int i = 0; i < num_faces; ++i)
+  {
+    ++counts[component_ids[i]];
+  }
+
+  // Split mesh faces into components
+  std::vector<Eigen::MatrixXi> F_split(num_components);
+  std::vector<int> F_counts(num_components, 0);
+  for (int i = 0; i < num_components; ++i)
+  {
+    F_split[i].resize(counts[i], 3);
+  }
+  for (int fi = 0; fi < num_faces; ++fi)
+  {
+    // Get component and current row for the component
+    int ci = component_ids[fi];
+    int ri = F_counts[ci];
+
+    // Set face component
+    F_split[ci].row(ri) = F.row(fi);
+
+    // Increment face count
+    ++F_counts[ci];
+  }
+
+  // Split mesh vertices into components and reindex face lists
+  V_components.resize(num_components);
+  F_components.resize(num_components);
+  I_components.resize(num_components);
+  J_components.resize(num_components);
+  for (int i = 0; i < num_components; ++i)
+  {
+    igl::remove_unreferenced(
+      V,
+      F_split[i],
+      V_components[i],
+      F_components[i],
+      I_components[i],
+      J_components[i]
+    );
+  }
+}
+
+/// Given a lists of separate mesh components, combine them into a single mesh
+///
+/// @param[in] V_components: list of component mesh vertices
+/// @param[in] F_components: list of component mesh faces
+/// @param[out] V: combined mesh vertices
+/// @param[out] F: combined mesh faces
+inline void
+combine_mesh_components(const std::vector<Eigen::MatrixXd>& V_components,
+                        const std::vector<Eigen::MatrixXi>& F_components,
+                        Eigen::MatrixXd& V,
+                        Eigen::MatrixXi& F)
+{
+  // Just use the libigl implementation
+  igl::combine(V_components, F_components, V, F);
+}
+
+
 
 // *********************
 // Filepath manipulation

@@ -15,3 +15,26 @@ target_link_libraries(view_quadratic_spline PRIVATE
 target_compile_options(view_quadratic_spline PRIVATE
   -Wall -Wpedantic -Wextra -Werror
 )
+
+add_executable(generate_hidden_cones generate_hidden_cones.cpp)
+target_link_libraries(generate_hidden_cones PRIVATE
+  QuadraticContoursLib
+  ConeGenerationLib
+  CLI11::CLI11
+)
+target_compile_options(generate_hidden_cones PRIVATE
+  -Wall -Wpedantic -Wextra -Werror
+)
+
+add_executable(parameterize_mesh parameterize_mesh.cpp)
+target_link_libraries(parameterize_mesh PRIVATE
+  QuadraticContoursLib
+  conformal_cpp
+  Eigen3::Eigen
+  spdlog::spdlog
+  igl::core
+  CLI11::CLI11
+)
+target_compile_options(parameterize_mesh PRIVATE
+  -Wall -Wpedantic -Wextra -Werror
+)
