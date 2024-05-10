@@ -323,11 +323,10 @@ compute_cusp_by_one_patch(
 {
   const Matrix6x3r normalized_surface_mapping_coeffs =
     spline_surface_patch.get_normalized_surface_mapping();
-  double px[6], py[6], pz[6], tx[6], ty[6];
+  double px[6], py[6], tx[6], ty[6];
   for (int i = 0; i < 6; i++) {
     px[i] = normalized_surface_mapping_coeffs(i, 0);
     py[i] = normalized_surface_mapping_coeffs(i, 1);
-    pz[i] = normalized_surface_mapping_coeffs(i, 2);
   }
 
   tangentx(px, py, tx);

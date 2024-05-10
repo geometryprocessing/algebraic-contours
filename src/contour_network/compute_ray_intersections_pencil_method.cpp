@@ -294,7 +294,7 @@ pencil_first_part(
     return false;
   }
 
-  double x;
+  double x = 0.;
   double determinant = std::numeric_limits<double>::infinity();
   for (int i = 0; i < num_cubic_real_roots; i++) {
     double A = a * cubic_real_roots[i] + l;

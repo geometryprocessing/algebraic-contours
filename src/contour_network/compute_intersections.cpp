@@ -136,7 +136,7 @@ compute_planar_curve_intersections(
       intersection_points,
       first_bezier_control_points,
       second_bezier_control_points);
-  } catch (std::runtime_error) {
+  } catch (std::runtime_error&) {
     intersection_points.clear();
     spdlog::error("Failed to find intersection points");
   }

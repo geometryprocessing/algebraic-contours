@@ -425,8 +425,6 @@ bool
 QuadraticSplineSurface::is_valid_patch_index(
   QuadraticSplineSurface::PatchIndex patch_index) const
 {
-  if (patch_index < 0)
-    return false;
   if (patch_index >= num_patches())
     return false;
 
