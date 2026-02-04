@@ -875,6 +875,26 @@ inline void read_camera_matrix(
   input_file.close();
 }
 
+// Write a 4x4 matrix from file
+///
+/// @param[in] filename: file with matrix to write
+/// @param[in] mat: matrix to write
+inline void write_camera_matrix(
+  const std::string &filename,
+  const Eigen::Matrix<double, 4, 4>& mat
+) {
+  // open file
+  std::ofstream output_file;
+  output_file.open(filename, std::ios::out | std::ios::trunc);
+  for (size_t i = 0; i < 4; ++i) {
+    for (size_t j = 0; j < 4; ++j) {
+      output_file << std::setprecision(17) << mat.coeff(i, j) << ",";
+    }
+    output_file << "\n";
+  }
+  output_file.close();
+}
+
 // ****************
 // Pythonic methods
 // ****************

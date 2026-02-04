@@ -93,3 +93,13 @@ Eigen::Matrix<double, 4, 4>
 axis_rotation_projective_matrix(double x_degree,
                                 double y_degree,
                                 double z_degree);
+
+
+Eigen::Matrix<double, 4, 4>
+blender_rotation_projective_matrix(
+  double x_degree,
+  double y_degree,
+  double z_degree,
+  double x_translation,
+  double y_translation,
+  double z_translation);

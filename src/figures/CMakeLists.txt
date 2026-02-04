@@ -34,6 +34,15 @@ target_compile_options(generate_example_figure PRIVATE
   -Wall -Wpedantic -Wextra -Werror
 )
 
+add_executable(generate_camera generate_camera.cpp)
+target_link_libraries(generate_camera PRIVATE
+  QuadraticContoursLib
+  CLI11::CLI11
+)
+target_compile_options(generate_camera PRIVATE
+  -Wall -Wpedantic -Wextra -Werror
+)
+
 add_executable(generate_perspective_figure generate_perspective_figure.cpp)
 target_link_libraries(generate_perspective_figure PRIVATE 
   QuadraticContoursLib

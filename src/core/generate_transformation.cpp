@@ -197,3 +197,23 @@ axis_rotation_projective_matrix(double x_degree,
 
   return rotation_matrix;
 }
+
+Eigen::Matrix<double, 4, 4>
+blender_rotation_projective_matrix(
+  double x_degree,
+  double y_degree,
+  double z_degree,
+  double x_translation,
+  double y_translation,
+  double z_translation)
+{
+  Eigen::Matrix<double, 4, 4> rotation_matrix =
+    translation_projective_matrix({-x_translation, -y_translation, -z_translation});
+  rotation_matrix =
+    z_axis_rotation_projective_matrix(-z_degree) * rotation_matrix;
+  rotation_matrix =
+    y_axis_rotation_projective_matrix(180 + y_degree) * rotation_matrix;
+  rotation_matrix =
+    x_axis_rotation_projective_matrix(x_degree) * rotation_matrix;
+  return rotation_matrix;
+}
