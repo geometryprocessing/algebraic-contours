@@ -105,7 +105,7 @@ ContourNetwork::screenshot(const std::string& filename,
   }
 
   // Take the screenshot
-  polyscope::screenshot(filename);
+  polyscope::screenshot(filename, true);
   SPDLOG_INFO("Screenshot saved to {}", filename);
   polyscope::removeAllStructures();
 }
@@ -131,7 +131,7 @@ ContourNetwork::write_rasterized_contours(const std::string& filename,
   polyscope::view::projectionMode = polyscope::ProjectionMode::Orthographic;
 
   // Take the screenshot
-  polyscope::screenshot(filename);
+  polyscope::screenshot(filename, true);
   SPDLOG_INFO("Screenshot saved to {}", filename);
   polyscope::removeAllStructures();
 }

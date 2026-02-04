@@ -1,4 +1,5 @@
 add_library(ContourNetworkLib
+  abstract_curve_network.cpp
   compute_contours.cpp
   compute_closed_contours.cpp
   compute_curve_frame.cpp
@@ -21,8 +22,9 @@ add_library(ContourNetworkLib
 )
 target_include_directories(ContourNetworkLib PUBLIC .)
 target_link_libraries(ContourNetworkLib PUBLIC
-  QuadraticContoursCoreLib
-  QuadraticSplineSurfaceLib
+  SmoothSplineLib
+  spdlog::spdlog
+  SVGLib
 )
 target_compile_definitions(ContourNetworkLib PUBLIC
   SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_DEBUG

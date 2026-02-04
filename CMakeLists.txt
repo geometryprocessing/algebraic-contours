@@ -19,33 +19,19 @@ endif()
 # Get required packages
 list(PREPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
-# Set compile definitions
-add_compile_definitions(EIGEN_STACK_ALLOCATION_LIMIT=0)
-add_compile_definitions(CHECK_VALIDITY)
-
-# Fetch libigl
-include(libigl)
-
 # Fetch other dependencies
-include(polyscope)
-include(eigen)
-include(spdlog)
-include(suitesparse)
 include(cli11)
+include(smooth-spline)
 add_subdirectory(${PROJECT_SOURCE_DIR}/ext/svg)
 
 # Install executables to bin directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # Build main library
-add_subdirectory(src/core)
-add_subdirectory(src/quadratic_spline_surface)
 add_subdirectory(src/contour_network)
-target_include_directories(QuadraticContoursCoreLib PUBLIC ${PROJECT_SOURCE_DIR}/ext )
 add_library(QuadraticContoursLib INTERFACE)
 target_link_libraries(QuadraticContoursLib INTERFACE
-  QuadraticContoursCoreLib
-  QuadraticSplineSurfaceLib
+  SmoothSplineLib
   ContourNetworkLib
 )
 

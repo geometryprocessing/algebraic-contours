@@ -2,6 +2,8 @@
 // To view a copy of the license, visit LICENSE.md.
 
 #include "abstract_curve_network.h"
+#include "common.h"
+#include "spdlog/spdlog.h"
 
 // ****************
 // Helper Functions

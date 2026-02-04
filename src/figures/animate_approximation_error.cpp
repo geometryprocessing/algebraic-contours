@@ -177,7 +177,7 @@ screenshot_surface(
   glm::vec3 glm_camera_position = { 0, 0, 0 };
   glm::vec3 glm_camera_target = { 0, 0, 1 };
   polyscope::view::lookAt(glm_camera_position, glm_camera_target);
-  polyscope::screenshot(filename);
+  polyscope::screenshot(filename, true);
   polyscope::removeAllStructures();
 }
 
@@ -194,7 +194,7 @@ screenshot_planar_surface(
   glm::vec3 glm_camera_position = { 0, 0, 0 };
   glm::vec3 glm_camera_target = { 0, 0, 1 };
   polyscope::view::lookAt(glm_camera_position, glm_camera_target);
-  polyscope::screenshot(filename);
+  polyscope::screenshot(filename, true);
   polyscope::removeAllStructures();
 }
 
